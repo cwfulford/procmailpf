@@ -1,0 +1,78 @@
+#!/bin/bash
+# $Id: procmailpf,v 1.51 2015/05/11 09:19:45 fulford Exp fulford $
+# $Source: /src/merlin/usr/local/etc/RCS/procmailpf,v $
+# $Revision: 1.51 $
+# Author C W Fulford.
+# Copyright 2015 (c) C W Fulford.
+# Licensed for public use under the LGPL, .
+# For assistance contact fulford@fulford.net 0709 229 5385
+########################################################################
+cmd=`basename $0`
+ver=`echo "$Id: procmailpf,v 1.51 2015/05/11 09:19:45 fulford Exp fulford $"|awk '{print $3,$4,$5}'`
+syntax="$cmd [[-c <client_id>] [-d] [-v] [[-m <maildomain>]|[-a <hostname>]]] |[-V]"
+while [ $# -gt 0 ] ;do
+	case $1 in 
+		-a) all=:;srvr=$2;shift 2;; 
+		-c) clientid=$2;shift 2;;
+		-d) set -x;debug=0;shift;;
+		-l) log=:;shift;;
+		-v) verbose=:;shift;;
+		-V) echo "$cmd $Revision: 1.51 $ $Date: 2015/05/11 09:19:45 $"|awk '{print $1,$3,$6}';exit;;  
+		-m)  maildomain=$2;shift 2 ;;
+		 *) echo "$syntax" >&2;exit 1;;
+	esac
+done
+
+[ "$clientid" ]|| { echo $syntax >&2; exit 1;}
+
+# Only $srvr or $maildomain should be set at this stage 
+[ "$srvr" -a "$maildomain" ] &&{ echo "$syntax" >&2; exit 1 ;}
+
+[ "$maildomain" ] &&{ 
+	getent hosts $maildomain >/dev/null||{
+		echo "$cmd: Can't find $maildomain" >&2;exit 1
+	}
+}
+[ "srvr" ] &&{ 
+	getent hosts $srvr >/dev/null||{
+		echo "$cmd: Can't find $srvr" >&2;exit 1
+	}
+}
+
+
+mdir=/var/qmail/mailnames
+
+qmail=/src/$clientid${mdir}/common/.qmail
+[ -r $qmail ] ||{ echo "$cmd: Can't find $qmail" >&2;exit 1 ;}
+
+procmailrc=/src/$clientid${mdir}/common/.procmailrc
+[ -r $procmailrc ] ||{ echo "$cmd: Can't find $procmailrc" >&2;exit 1 ;}
+
+if [ "$all" ];then 
+	vdomains=`ssh $srvr "cd $mdir;ls"`
+fi
+for maildomain in $vdomains $maildomain ;do
+	ssh $maildomain "sudo find $mdir/$maildomain -mindepth 1 -maxdepth 1 -type d"|
+	while read d ;do
+	 	cat $qmail | ssh  $maildomain "sudo dd of=\"$d\"/.qmail 2>/dev/null"
+		[ "$verbose" ] && echo "$d/.qmail updated"
+		[ "$log" ] && logger -t $cmd "$d/.qmail updated"
+		mailuser=`basename $d`
+ 		cat $procmailrc |sed -e 's/<mail domain>/'$maildomain'/;s/<mail user>/'$mailuser'/'|
+			ssh $maildomain "sudo dd of=\"$d\"/.procmailrc 2>/dev/null
+				sudo chown popuser.popuser \"$d\"/.procmailrc
+				sudo chmod 644 \"$d\"/.procmailrc"
+		[ "$verbose" ] && echo "$d/.procmailrc updated"
+		[ "$log" ] && logger -t $cmd "$d/.procmailrc updated"
+	done
+done
+
+# Tell postfix to recheck configuration
+[ -n "$srvr" ] || srvr=$maildomain 
+ssh $srvr "sudo service postfix reload"|
+if grep OK >/dev/null;then
+	[ "$verbose" ] && echo "$cmd: postfix on $srvr notified"
+else
+	echo "$cmd: postfix reload failed">&2
+	exit 1
+fi

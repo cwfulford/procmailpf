@@ -1,0 +1,294 @@
+
+<p><a href="#heading1">NAME</a><br/>
+<a href="#heading2">SYNOPSIS</a><br/>
+<a href="#heading3">AVAILABILITY</a><br/>
+<a href="#heading4">DESCRIPTION</a><br/>
+<a href="#heading5">OPTIONS</a><br/>
+<a href="#heading6">FILES</a><br/>
+<a href="#heading7">EXAMPLES</a><br/>
+<a href="#heading8">BUGS</a><br/>
+<a href="#heading9">SEE ALSO</a><br/>
+<a href="#heading10">AUTHOR</a><br/>
+<a href="#heading11">HISTORY</a><br/>
+
+</p>
+<hr/>
+
+
+<h2 id="heading1">NAME
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=procmailpf">procmailpf</a></b>
+- configures a remote mail domain running <b>plesk</b>,
+<b>postfix</b> and <b>spamassassin</b> on a <b>CentOS</b>
+platform to use <b>procmail</b> for the disposition of spam
+e-mail and messages with attachments containing zipped .EXE
+files.</p>
+
+<h2 id="heading2">SYNOPSIS
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=procmailpf">procmailpf</a></b>
+[[<b>-a</b> <i>&lt;host_name&gt;</i>] | [<b>-m</b>
+<i>&lt;mail_domain&gt;</i>]] [<b>-c</b>
+<i>&lt;client_id&gt;</i>] [<b>-d</b>] [<b>-l</b>]
+[<b>-v</b>]] | [<b>-V</b> ]</p>
+
+<h2 id="heading3">AVAILABILITY
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=procmailpf">procmailpf</a></b>
+is a Bourne shell script which should work equally well on
+all versions of UNIX, Linux and Mac OS X.</p>
+
+<h2 id="heading4">DESCRIPTION
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><a href="./scripts.php?script=procmailpf">procmailpf</a></b>
+uses <b>ssh</b> to install or update <i><a href="./scripts.php?script=.qmail">.qmail</a></i> and
+<i><a href="./scripts.php?script=.procmailrc">.procmailrc</a></i> files from local templates to all
+accounts in a mail domain.</p>
+
+<h2 id="heading5">OPTIONS
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="17%"></col>
+<col width="65%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><b>-a</b></p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><i>&lt;host_name&gt;</i></p></td>
+<td>
+</td></tr>
+</table>
+
+<p style="margin-left:18%; margin-top: 1em">The <b>-a</b>
+option tells <b><a href="./scripts.php?script=procmailpf">procmailpf</a></b> to find all virtual
+maildomains on <i>&lt;host_name&gt;</i> and install or
+update <i><a href="./scripts.php?script=.procmailrc">.procmailrc</a></i> and <i><a href="./scripts.php?script=.qmail">.qmail</a></i> to each account
+in the domain.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="17%"></col>
+<col width="65%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><b>-c</b></p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><i>&lt;client_id&gt;</i></p></td>
+<td>
+</td></tr>
+</table>
+
+<p style="margin-left:18%; margin-top: 1em">The <b>-c</b>
+option is required and determines which pair of
+<i>client</i> templates are to be used. (See FILES
+below).</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="28%"></col>
+<col width="54%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><b>-d</b></p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">Set debug mode on.</p></td>
+<td>
+</td></tr>
+</table>
+
+<p style="margin-left:18%; margin-top: 1em">The <b>-x</b>
+option is set within the shell and each command in the
+script is echoed to the console.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="82%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><b>-l</b></p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">The <b>syslog</b> facility is
+used to log each file installed or update.</p></td></tr>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p><b>-m</b></p></td>
+<td></td>
+<td>
+
+
+<p><i>&lt;mail_domain&gt;</i></p></td></tr>
+</table>
+
+<p style="margin-left:18%; margin-top: 1em">If the
+<b>-a</b> option is not being used then the mail domain to
+be updated must be selected with the <b>-m</b> option. It is
+an error at present to select both an hostname and a
+maildomain. (This may change as I find some clients have set
+up virtual mail domains which at least at the time of
+invocation do not resolve in <b>DNS</b>.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<colgroup><col width="11%"></col>
+<col width="3%"></col>
+<col width="4%" class="center"></col>
+<col width="54%"></col>
+<col width="28%"></col>
+</colgroup>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em"><b>-v</b></p></td>
+<td></td>
+<td>
+
+
+<p style="margin-top: 1em">Sets verbose mode.</p></td>
+<td>
+</td></tr>
+<tr valign="top" align="left">
+<td></td>
+<td>
+
+
+<p><b>-V</b></p></td>
+<td></td>
+<td>
+
+
+<p>Print the version details and exit.</p></td>
+<td>
+</td></tr>
+</table>
+
+<h2 id="heading6">FILES
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>/src/&lt;client_id&gt;/var/qmail/common/<a href="./scripts.php?script=.qmail">.qmail</a></i>,
+<i><br/>
+
+/src/&lt;client_id&gt;/var/qmail/common/<a href="./scripts.php?script=.procmailrc">.procmailrc</a></i>,</p>
+
+<h2 id="heading7">EXAMPLES
+</h2>
+
+
+<p style="margin-left:22%; margin-top: 1em"><tt><a href="./scripts.php?script=procmailpf">procmailpf</a>
+-v -c companyA -m example.maildomain</tt></p>
+
+<p style="margin-left:11%; margin-top: 1em">All mail
+accounts in mail domain &quot;example.maildomain&quot; have
+<i><a href="./scripts.php?script=.procmailrc">.procmailrc</a></i> and <i><a href="./scripts.php?script=.qmail">.qmail</a></i> installed or updated
+from the templates
+<i>/src/companyA/var/qmail/common/<a href="./scripts.php?script=.qmail">.qmail</a></i> and
+<i>/src/companyA/var/qmail/common/<a href="./scripts.php?script=.procmailrc">.procmailrc</a></i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Each file
+updated is reported to standard out.</p>
+
+<p style="margin-left:22%; margin-top: 1em"><tt><a href="./scripts.php?script=procmailpf">procmailpf</a>
+-v -l -c companyB -a mailhostB@domain.name</tt></p>
+
+<p style="margin-left:11%; margin-top: 1em">All the mail
+accounts for all virtual mail domains found on the host
+<i>mailhostB@domain.name</i> have <i><a href="./scripts.php?script=.qmail">.qmail</a></i> and
+<i><a href="./scripts.php?script=.procmailrc">.procmailrc</a></i> installed or updated from the templates
+<i>/src/companyB/var/qmail/common/<a href="./scripts.php?script=.qmail">.qmail</a></i> and
+<i>/src/companyB/var/qmail/common/<a href="./scripts.php?script=.procmailrc">.procmailrc</a></i>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Each
+installation or update is logged using the syslog
+facility.</p>
+
+<h2 id="heading8">BUGS
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The script is
+quite crude and has very little, if any, error checking. The
+consequences of unexpected input are untested.</p>
+
+<h2 id="heading9">SEE ALSO
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>chkmaillsbouncedzippedexeHow-to
+junk mail with zipped exe attachments</i>.</p>
+
+<h2 id="heading10">AUTHOR
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Clifford W
+Fulford, <a href="http://www.citylinux.com"
+title="Go to the City Linux homepage">
+City Linux
+</a>. Contact <a href="mailto:fulford@fulford.net" title="Send mail to Clifford W Fulford">fulford@fulford.net</a> or +44
+(0)709 229 5385.</p>
+
+<h2 id="heading11">HISTORY
+</h2>
+<hr/>

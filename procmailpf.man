@@ -1,0 +1,141 @@
+.TH PROCMAILPF 8l "28th April 2015 r1.45
+.SH NAME
+.B procmailpf
+- configures a remote mail domain running 
+.BR plesk ,
+.B postfix 
+and
+.B spamassassin
+on a 
+.B CentOS
+platform to use 
+.B procmail 
+for the disposition of spam e-mail and messages with attachments containing
+zipped .EXE files.
+.SH SYNOPSIS
+\fBprocmailpf\fR
+[[\fB-a \fI<host_name>\fR] | 
+[\fB-m \fI<mail_domain>\fR]]
+[\fB-c \fI<client_id>\fR] 
+[\fB-d\fR] 
+[\fB-l\fR]
+[\fB-v\fR]] |
+[\fB-V \fR]
+.br
+.SH AVAILABILITY
+.B procmailpf
+is a Bourne shell script which should work equally well on all versions of UNIX,
+Linux and Mac OS X.
+.SH DESCRIPTION
+.B procmailpf
+uses
+.B ssh
+to install or update 
+.I .qmail   
+and 
+.I .procmailrc
+files from local templates to all accounts in a mail domain.
+.SH OPTIONS
+.TP 5
+.B -a
+.I <host_name>
+.IP
+The 
+.B -a 
+option tells
+.B procmailpf
+to find all virtual maildomains on 
+.I <host_name>
+and install or update
+.I .procmailrc
+and
+.I .qmail
+to each account in the domain.
+.TP 5
+.B -c
+.I <client_id>
+.IP
+The
+.B -c 
+option
+is required and determines which pair of 
+.I client 
+templates are to be used. (See FILES below).
+.TP 5
+.B -d
+Set debug mode on.
+.IP
+The \fB-x\fR option is set within the shell
+and each command in the script is echoed to the console.
+.TP 5
+.B -l
+The 
+.B syslog
+facility is used to log each file installed or update.
+.TP 5
+.B -m
+.I <mail_domain>
+.IP
+If the
+.B -a
+option is not being used then the mail domain to be updated must be selected
+with the 
+.B -m
+option. It is an error at present to select both an hostname and a
+maildomain. (This may change as I find some clients have set up
+virtual mail domains which at least at the time of invocation do not
+resolve in 
+.BR DNS .
+.TP 5
+.B -v
+Sets verbose mode.
+.TP 5
+\fB-V\fR
+Print the version details and exit.
+.SH FILES
+\fI/src/<client_id>/var/qmail/common/.qmail\fR,
+.br
+\fI/src/<client_id>/var/qmail/common/.procmailrc\fR,
+.SH EXAMPLES
+.IP
+.ft CW
+procmailpf -v  -c companyA -m example.maildomain 
+.ft R
+.LP
+All mail accounts in mail domain "example.maildomain" have
+.I .procmailrc
+and
+.I .qmail
+installed or updated from the templates
+.I /src/companyA/var/qmail/common/.qmail 
+and
+.IR /src/companyA/var/qmail/common/.procmailrc .
+.LP
+Each file updated is reported to standard out.
+.IP
+.ft CW
+procmailpf -v -l -c companyB -a mailhostB@domain.name
+.LP
+All the mail accounts for all virtual mail domains found on the host
+.I mailhostB@domain.name
+have 
+.I .qmail
+and
+.I .procmailrc
+installed or updated from the templates 
+.I /src/companyB/var/qmail/common/.qmail
+and
+.IR /src/companyB/var/qmail/common/.procmailrc .
+.LP
+Each installation or update is logged using the syslog facility.
+.SH BUGS
+The script is quite crude and has very little, if any,  error checking.
+The consequences of unexpected input are untested.
+.SH SEE ALSO
+\fIchkmail\R,
+\fIlsbounced\R,
+\fIzippedexe\R,
+\fIHow-to junk mail with zipped exe attachments\fR.
+.SH AUTHOR
+Clifford W Fulford, City Linux. Contact fulford@fulford.net or +44 (0)709 229 5385.
+.SH HISTORY
